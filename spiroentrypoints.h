@@ -41,20 +41,23 @@ static const int SPIRO_ARC_MIN_MAYBE = 0x3000;
 static const int SPIRO_QUAD0_TO_BEZIER = 0x4000;
 
 /* _ * Functions * _ */
+/* Backwards compatibility functions */
 
 /* These 6 functions are kept for backwards compatibility for older */
 /* programs. Please use the functions listed afterwards that return */
 /* success/failure replies when done. See version 20190731 or later */
-extern void TaggedSpiroCPsToBezier(spiro_cp *spiros,bezctx *bc);
-extern void SpiroCPsToBezier(spiro_cp *spiros,int n,int isclosed,bezctx *bc);
+extern void TaggedSpiroCPsToBezier(spiro_cp *spiros,void* bc);
+extern void SpiroCPsToBezier(spiro_cp *spiros,int n,int isclosed,void* bc);
 
 /* These functions are available in libspiro-0.2.20130930 or higher */
-extern int TaggedSpiroCPsToBezier0(spiro_cp *spiros,bezctx *bc);
-extern int SpiroCPsToBezier0(spiro_cp *spiros,int n,int isclosed,bezctx *bc);
+extern int TaggedSpiroCPsToBezier0(spiro_cp *spiros,void* bc);
+extern int SpiroCPsToBezier0(spiro_cp *spiros,int n,int isclosed,void* bc);
 
 /* These functions are available in libspiro-0.3.20150131 or higher */
-extern void TaggedSpiroCPsToBezier1(spiro_cp *spiros,bezctx *bc,int *done);
-extern void SpiroCPsToBezier1(spiro_cp *spiros,int n,int isclosed,bezctx *bc,int *done);
+extern void TaggedSpiroCPsToBezier1(spiro_cp *spiros,void* bc,int *done);
+extern void SpiroCPsToBezier1(spiro_cp *spiros,int n,int isclosed,void* bc,int *done);
+
+/* End backwards compatibility functions */
 
 /* These functions are available in libspiro-20190731 or higher and */
 /* give you best flexibility compared to earlier libspiro versions. */
@@ -66,13 +69,13 @@ extern const char *LibSpiroVersion(void);
 /* Closed contours must have an extra cp at the end whose ty is 'z' */
 /*               the x&y values of this extra cp are ignored        */
 /* ncq allows you to toggle different outputs independent of spiros */
-extern int TaggedSpiroCPsToBezier2(spiro_cp *spiros,int ncq,bezctx *bc);
+extern int TaggedSpiroCPsToBezier2(spiro_cp *spiros,int ncq,void* bc);
 
 /* The first argument is an array of spiro control points.          */
 /* Open contours do not need to start with '{', nor to end with '}' */
 /* Close contours do not need to end with 'z'                       */
 /* ncq allows you to toggle different outputs independent of spiros */
-extern int SpiroCPsToBezier2(spiro_cp *spiros,int n,int ncq,int isclosed,bezctx *bc);
+extern int SpiroCPsToBezier2(spiro_cp *spiros,int n,int ncq,int isclosed,void* bc);
 
 #ifdef __cplusplus
 }

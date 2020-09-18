@@ -44,7 +44,7 @@ run_spiro0(const spiro_cp *src, double *dm, int ncq, int n);
 
 void
 spiro_to_bpath0(const spiro_cp *src, const spiro_seg *s,
-		double *dm, int ncq, int n, bezctx *bc);
+		double *dm, int ncq, int n, void *bc);
 
 int spiroreverse(spiro_cp *src, int n); /* internal use */
  

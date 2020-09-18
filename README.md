@@ -6,11 +6,11 @@
 
 Spiro is the creation of [Raph Levien](http://www.levien.com/). It simplifies the drawing of beautiful curves.
 
-Using bézier splines an artist can easily draw curves with the same slope on either side of an on-curve point. Spiros, on the other hand, are based on clothoid splines which make it easy to maintain constant curvature as well as constant slope. Such curves will simply look nicer.
+Using Bézier splines an artist can easily draw curves with the same slope on either side of an on-curve point. Spiros, on the other hand, are based on clothoid splines which make it easy to maintain constant curvature as well as constant slope. Such curves will simply look nicer.
 
 Raph Levien's spiro splines only use on-curve points and so are easier to use and more intuitive to the artist.
 
-This library will take an array of spiro control points and convert them into a series of bézier splines which can then be used in the myriad of ways the world has come to use béziers.
+This library will take an array of spiro control points and convert them into a series of Bézier splines which can then be used in the myriad of ways the world has come to use Béziers.
 
 ## Installation
 
@@ -60,8 +60,8 @@ make install
 ```
 
 NOTE: Some Distros and Operating Systems may require you to run 'ldconfig'
-to recognize LibSpiro if you are not rebooting your computer first before
-installing another program that depends on LibSpiro. To do this, you may
+to recognize libspiro if you are not rebooting your computer first before
+installing another program that depends on libspiro. To do this, you may
 need to run 'ldconfig' in 'su -' mode after you have done 'make install':
 ```sh
 	$ su -
@@ -94,7 +94,7 @@ Mac OS X: A helping script, `./fontforge.sh` is provided to run FontForge inside
 - Basic Types
   - [spiro control point](#the-spiro-control-point)
   - [ncq control value](#the-ncq-control-value)
-  - [bézier context](#the-bezier-context)
+  - [Bézier context](#the-bezier-context)
 - [Header file](#calling-into-libspiro)
 - Entry points
   - int [SpiroCPsToBezier2](#spirocpstobezier2)(spiro_cp *,int n,int ncq,int is_closed,bezctx *)
@@ -108,24 +108,27 @@ Mac OS X: A helping script, `./fontforge.sh` is provided to run FontForge inside
 typedef struct {
     double x;
     double y;
-    char ty;
+    char ty;		/* Spiro point type */
 } spiro_cp;
 
-    /* Possible values of the "ty" field. */
-#define SPIRO_CORNER	'v'
-#define SPIRO_G4	'o'
-#define SPIRO_G2	'c'
-#define SPIRO_LEFT	'['
-#define SPIRO_RIGHT	']'
-#define SPIRO_ANCHOR	'a'
-#define SPIRO_HANDLE	'h'
+/* Possible values of the "ty" field. */
+static const char SPIRO_CORNER = 'v';
+static const char SPIRO_G4 = 'o';
+static const char SPIRO_G2 = 'c';
+static const char SPIRO_LEFT = '[';
+static const char SPIRO_RIGHT = ']';
 
-    /* For a closed contour add an extra cp with a ty set to */
-#define SPIRO_END		'z'
-    /* For an open contour the first cp must have a ty set to*/
-#define SPIRO_OPEN_CONTOUR	'{'
-    /* For an open contour the last cp must have a ty set to */
-#define SPIRO_END_OPEN_CONTOUR	'}'
+/* For a closed contour add an extra cp with a ty set to */
+static const char SPIRO_END = 'z';
+/* For an open contour the first cp must have a ty set to*/
+static const char SPIRO_OPEN_CONTOUR = '{';
+/* For an open contour the last cp must have a ty set to */
+static const char SPIRO_END_OPEN_CONTOUR = '}';
+
+/* Curve crossing point with a 'fixed angle' of crossing */
+static const char SPIRO_ANCHOR = 'a';
+/* Curve crossing handle cp(hx,hy) relative to cp(ax,ay) */
+static const char SPIRO_HANDLE = 'h';
 ```
 
 A spiro control point contains a location and a point type. There are six basic types of spiro control points:
@@ -168,16 +171,16 @@ Below is the current toggle switch definitions, and default 'ncq' value is zero.
 
 ```c
 /* int ncq flags and values */
-#define SPIRO_INCLUDE_LAST_KNOT	0x0100
-#define SPIRO_RETRO_VER1	0x0400
-#define SPIRO_REVERSE_SRC	0x0800
-#define SPIRO_ARC_CUB_QUAD_CLR	0x7FFF
-#define SPIRO_ARC_CUB_QUAD_MASK	0x7000
-#define SPIRO_CUBIC_TO_BEZIER	0x0000
-#define SPIRO_CUBIC_MIN_MAYBE	0x1000
-#define SPIRO_ARC_MAYBE		0x2000
-#define SPIRO_ARC_MIN_MAYBE	0x3000
-#define SPIRO_QUAD0_TO_BEZIER	0x4000
+static const int SPIRO_INCLUDE_LAST_KNOT = 0x0100;
+static const int SPIRO_RETRO_VER1 = 0x0400;
+static const int SPIRO_REVERSE_SRC = 0x0800;
+static const int SPIRO_ARC_CUB_QUAD_CLR = 0x7FFF;
+static const int SPIRO_ARC_CUB_QUAD_MASK = 0x7000;
+static const int SPIRO_CUBIC_TO_BEZIER = 0x0000;
+static const int SPIRO_CUBIC_MIN_MAYBE = 0x1000;
+static const int SPIRO_ARC_MAYBE = 0x2000;
+static const int SPIRO_ARC_MIN_MAYBE = 0x3000;
+static const int SPIRO_QUAD0_TO_BEZIER = 0x4000;
 ```
 
 The definitions for ncq (above) are:
@@ -197,12 +200,12 @@ Older programs that use the older libspiro interfaces will see no-change since t
 SPIRO_REVERSE_SRC:
 There may be a need to reverse the spiro path direction.
 This option edits the source spiro path, and reverses the information, then proceeds to continue doing libspiro calculations with the reversed path.
-When libspiro is done calculating bezier output, you will also have a reversed (input) spiro path, therefore save the new spiro path if you need it.
+When libspiro is done calculating Bézier output, you will also have a reversed (input) spiro path, therefore save the new spiro path if you need it.
 This simplifies this process for the calling program to a simple option 'SPIRO_REVERSE_SRC', and the results are up to date as per ths version of libspiro.
 NOTE - libspiro calculations are a one-way calculation, so you are not likely to see the same results in the reverse spiro path direction, but if you need this option, it is available here.
 
 SPIRO_CUBIC_TO_BEZIER:
-LibSpiro default action is to create cubic bezier curves.
+libspiro default action is to create cubic Bézier curves.
 
 SPIRO_CUBIC_MIN_MAYBE:
 Cubic arcs can potentially be made with greater bends and less points.
@@ -211,44 +214,84 @@ SPIRO_ARC_MAYBE and SPIRO_ARC_MIN_MAYBE:
 Instead of the default cubic output, this exposes the midpoint, which might be useful to someone.
 
 SPIRO_QUAD0_TO_BEZIER:
-Rough approximation of quadratic to bezier curves. Knot points will have smooth connection but midpoints may be visually okay or not.
+Rough approximation of quadratic to Bézier curves. Knot points will have smooth connection but midpoints may be visually okay or not.
 
 
-#### The bezier context
+#### The Bézier context
 
 ```c
 struct _bezctx {
     /* Called by spiro to start a contour */
-    void (*moveto)(bezctx *bc, double x, double y, int is_open);
+    void (*moveto)(void *bc, double x, double y, int is_open);
 
     /* Called by spiro to move from the last point to the next one on a straight line */
-    void (*lineto)(bezctx *bc, double x, double y);
+    void (*lineto)(void *bc, double x, double y);
 
-    /* Called by spiro to move from the last point to the next along a quadratic bézier spline */
-    /* (x1,y1) is the quadratic bézier control point and (x2,y2) will be the new end point */
-    void (*quadto)(bezctx *bc, double x1, double y1, double x2, double y2);
+    /* Called by spiro to move from the last point to the next along a quadratic Bézier spline */
+    /* (x1,y1) is the quadratic Bézier control point and (x2,y2) will be the new end point */
+    void (*quadto)(void *bc, double x1, double y1, double x2, double y2);
 
-    /* Called by spiro to move from the last point to the next along a cubic bézier spline */
+    /* Called by spiro to move from the last point to the next along a cubic Bézier spline */
     /* (x1,y1) and (x2,y2) are the two off-curve control point and (x3,y3) will be the new end point */
-    void (*curveto)(bezctx *bc, double x1, double y1, double x2, double y2,
+    void (*curveto)(void *bc, double x1, double y1, double x2, double y2,
             double x3, double y3);
 
     /* Called by spiro to notify calling function this is a knot point */
-    void (*mark_knot)(bezctx *bc, int knot_idx);
+    void (*mark_knot)(void *bc, int knot_idx);
 };
 ```
 
-You must create a super-class of this abstract type that handles the creation of your particular representation of bézier splines. As an [example I provide the one used by Raph to generate PostScript output](bezctx.md) (cubic béziers). Spiro will convert a set of spiro_cps into a set of bézier curves. As it does so it will call the appropriate routine in your bézier context with this information – this should allow you to create your own internal representation of those curves.
+For almost all applications, you must create a super-class of this abstract type that handles the creation of your particular representation of Bézier splines. As an [example I provide the one used by Raph to generate PostScript output](bezctx.md) (cubic Béziers). Spiro will convert a set of spiro_cps into a set of Bézier curves. As it does so it will call the appropriate routine in your Bézier context with this information – this should allow you to create your own internal representation of those curves.
+
+##### On types
+
+Before 20200918, the Bézier context was of type `bezctx*`, meaning, a pointer to a `_bezctx` struct. (`typedef struct _bezctx bezctx;`)
+
+Afterwards, it was changed to a `void*`, meaning, any pointer. As C is not object oriented and does not have classes, there is no better alternative.
+
+The main reasons this was done is that Rust's `bindgen` was applying Rust's type checking to the struct, thinking it was really supposed to be a `bezctx` and nothing else. ([_Cf_. issue №29](https://github.com/fontforge/libspiro/issues/29))
+
+However, `void*` is also more correct. As stated above, in almost all applications (any application that needs to store the produced Bézier and not just immediately write it out), a typecast is going to be needed to silence compiler warnings. In almost all applications, it makes no sense, therefore, for the type to be `bezctx*`, as the programmer will be typecasting. Instead of defining a concrete type, then, allowing any type is better.
+
+Of course, though, to prevent segmentation faults, the type you use must contain all of the fields, in the same order, as a `bezctx*`, whether directly in your subordinate `struct`, or else in a `base` item.
+
+If you were not already typecasting for some reason (perhaps you made, for example, an SVG writer), you can fix your callback code to link with the new version of the library by changing the first argument in the signatures of all your custom callback functions (i.e. `bezctx_moveto`, `bezctx_lineto`, etc.) from `bezctx *bc` to `void* _bc`. Then, on the first one of each callback function, do:
+
+```c
+    bezctx* bc = (bezctx*)_bc;
+```
+
+Example:
+
+```diff
+diff --git a/bezctx.c b/bezctx.c
+index 94979ff..9f55eef 100644
+--- a/bezctx.c
++++ b/bezctx.c
+@@ -25,41 +25,46 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+
+ #include "bezctx.h"
+
+-void bezctx_moveto(bezctx *bc, double x, double y, int is_open)
++void bezctx_moveto(void *_bc, double x, double y, int is_open)
+ {
++    bezctx* bc = (bezctx*)_bc;
+ #ifdef VERBOSE
+     printf("moveto(%g,%g)_%d\n",x,y,is_open);
+ #endif
+     bc->moveto(bc, x, y, is_open);
+ }
+```
 
 #### Calling into libspiro
 
-Your program needs this Libspiro header file:
+Your program needs this libspiro header file:
 
 ```c
 #include <spiroentrypoints.h>
 ```
 
-You must define a bézier context that is appropriate for your internal splines (See [Raph's PostScript example](bezctx.md)).
+You must define a Bézier context that is appropriate for your internal splines (See [Raph's PostScript example](bezctx.md)).
 
 #### SpiroCPsToBezier2
 
@@ -273,8 +316,8 @@ Then call `SpiroCPsToBezier2`, a routine which takes 5 arguments and returns bc 
 2. The number of elements in the spiros array (this example has 4)
 3. Additional ncq control variable (default==0)
 4. Whether this describes a closed (True=1) or open (False=0) contour
-5. A bézier results output context
-6. An integer success flag. 1 = completed task and have valid bézier results, or  0 = unable to complete task, bézier results are invalid.
+5. A Bézier results output context
+6. An integer success flag. 1 = completed task and have valid Bézier results, or  0 = unable to complete task, Bézier results are invalid.
 
   ```c
     bc = new_bezctx_ps();
@@ -316,9 +359,9 @@ An open curve will have the type of the first control point set to `SPIRO_OPEN_C
 In this case there is no need to provide a point count nor an open/closed contour flag. That information can be obtained from the control points themselves. So `TaggedSpiroCPsToBezier2` only takes 3 arguments and returns bc and an integer pass/fail flag.
 
 1. An array of input spiros
-2. A bézier results output context
+2. A Bézier results output context
 3. Additional ncq control variable (default==0)
-4. An integer success flag. 1 = completed task and have valid bézier results, or  0 = unable to complete task, bézier results are invalid.
+4. An integer success flag. 1 = completed task and have valid Bézier results, or  0 = unable to complete task, Bézier results are invalid.
 
    ```c
     bc = new_bezctx_ps();

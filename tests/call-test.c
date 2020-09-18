@@ -504,20 +504,20 @@ int co[] = {1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1,
 #ifndef DO_CALL_TESTM
 /* Provide bare-bones do-nothing functions for testing. This only */
 /* printf values that would normally be handled by user programs. */
-void test_moveto(bezctx *bc, double x, double y, int is_open) {
+void test_moveto(void* bc, double x, double y, int is_open) {
     printf("test_moveto(%g,%g)_%d\n",x,y,is_open);
 }
-void test_lineto(bezctx *bc, double x, double y) {
+void test_lineto(void* bc, double x, double y) {
     printf("test_lineto(%g,%g)\n",x,y);
 }
-void test_quadto(bezctx *bc, double x1, double y1, double x2, double y2) {
+void test_quadto(void* bc, double x1, double y1, double x2, double y2) {
     printf("test_quadto(%g,%g, %g,%g)\n",x1,y1,x2,y2);
 }
-void test_curveto(bezctx *bc, double x1, double y1, double x2, double y2,
+void test_curveto(void* bc, double x1, double y1, double x2, double y2,
 		  double x3, double y3) {
     printf("test_curveto(%g,%g, %g,%g, %g,%g)\n",x1,y1,x2,y2,x3,y3);
 }
-void test_mark_knot(bezctx *bc, int knot_idx) {
+void test_mark_knot(void* bc, int knot_idx) {
     printf("test_mark_knot()_%d\n",knot_idx);
 }
 
@@ -823,7 +823,7 @@ typedef struct {
 
 #define S_RESULTS 50
 
-void test_s_moveto(bezctx *z, double x, double y, int is_open) {
+void test_s_moveto(void* z, double x, double y, int is_open) {
     test_bezctx *p = (test_bezctx*)z;
     int i;
 
@@ -838,7 +838,7 @@ void test_s_moveto(bezctx *z, double x, double y, int is_open) {
     }
 }
 
-void test_s_lineto(bezctx *z, double x, double y) {
+void test_s_lineto(void* z, double x, double y) {
     test_bezctx *p = (test_bezctx*)z;
     int i;
 
@@ -852,7 +852,7 @@ void test_s_lineto(bezctx *z, double x, double y) {
     }
 }
 
-void test_s_quadto(bezctx *z, double x1, double y1, double x2, double y2) {
+void test_s_quadto(void* z, double x1, double y1, double x2, double y2) {
     test_bezctx *p = (test_bezctx*)z;
     int i;
 
@@ -868,7 +868,7 @@ void test_s_quadto(bezctx *z, double x1, double y1, double x2, double y2) {
     }
 }
 
-void test_s_curveto(bezctx *z, double x1, double y1, double x2, double y2,
+void test_s_curveto(void* z, double x1, double y1, double x2, double y2,
 		  double x3, double y3) {
     test_bezctx *p = (test_bezctx*)z;
     int i;
@@ -887,7 +887,7 @@ void test_s_curveto(bezctx *z, double x1, double y1, double x2, double y2,
     }
 }
 
-void test_s_mark_knot(bezctx *z, int knot_idx) {
+void test_s_mark_knot(void* z, int knot_idx) {
     test_bezctx *p = (test_bezctx*)z;
 
     if ( p->len < S_RESULTS )

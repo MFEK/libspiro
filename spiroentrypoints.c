@@ -24,27 +24,27 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #include "spiroentrypoints.h"
 
 /* These six functions are kept for backwards compatibility */
-void SpiroCPsToBezier(spiro_cp *spiros,int n,int isclosed,bezctx *bc) {
+void SpiroCPsToBezier(spiro_cp *spiros,int n,int isclosed,void *bc) {
     SpiroCPsToBezier2(spiros,n,SPIRO_RETRO_VER1,isclosed,bc);
 }
-void TaggedSpiroCPsToBezier(spiro_cp *spiros,bezctx *bc) {
+void TaggedSpiroCPsToBezier(spiro_cp *spiros,void *bc) {
     TaggedSpiroCPsToBezier2(spiros,SPIRO_RETRO_VER1,bc);
 }
-int SpiroCPsToBezier0(spiro_cp *spiros,int n,int isclosed,bezctx *bc) {
+int SpiroCPsToBezier0(spiro_cp *spiros,int n,int isclosed,void *bc) {
     return SpiroCPsToBezier2(spiros,n,SPIRO_RETRO_VER1,isclosed,bc);
 }
-int TaggedSpiroCPsToBezier0(spiro_cp *spiros,bezctx *bc) {
+int TaggedSpiroCPsToBezier0(spiro_cp *spiros,void *bc) {
     return TaggedSpiroCPsToBezier2(spiros,SPIRO_RETRO_VER1,bc);
 }
-void SpiroCPsToBezier1(spiro_cp *spiros,int n,int isclosed,bezctx *bc,int *done) {
+void SpiroCPsToBezier1(spiro_cp *spiros,int n,int isclosed,void *bc,int *done) {
     *done = SpiroCPsToBezier2(spiros,n,SPIRO_RETRO_VER1,isclosed,bc);
 }
-void TaggedSpiroCPsToBezier1(spiro_cp *spiros,bezctx *bc,int *done) {
+void TaggedSpiroCPsToBezier1(spiro_cp *spiros,void *bc,int *done) {
     *done = TaggedSpiroCPsToBezier2(spiros,SPIRO_RETRO_VER1,bc);
 }
 
 
-int SpiroCPsToBezier2(spiro_cp *spiros,int n,int ncq,int isclosed,bezctx *bc) {
+int SpiroCPsToBezier2(spiro_cp *spiros,int n,int ncq,int isclosed,void *bc) {
     double dm[6];
     spiro_seg *s;
 
@@ -71,7 +71,7 @@ int SpiroCPsToBezier2(spiro_cp *spiros,int n,int ncq,int isclosed,bezctx *bc) {
     return 0; /* spiro did not converge or encountered non-finite values */
 }
 
-int TaggedSpiroCPsToBezier2(spiro_cp *spiros,int ncq,bezctx *bc) {
+int TaggedSpiroCPsToBezier2(spiro_cp *spiros,int ncq,void *bc) {
     double dm[6];
     spiro_seg *s;
     int n;

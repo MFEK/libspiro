@@ -1011,7 +1011,7 @@ solve_spiroerr0:
 static void
 spiro_seg_to_bpath1(const double ks[4], double *dm, double *di,
 		   double x0, double y0, double x1, double y1,
-		   bezctx *bc, int ncq, int depth)
+		   void *bc, int ncq, int depth)
 {
     double bend, seg_ch, seg_th, ch, th, scale, rot;
     double th_even, th_odd, ul, vl, ur, vr;
@@ -1243,7 +1243,7 @@ free_spiro(spiro_seg *s)
 
 void
 spiro_to_bpath0(const spiro_cp *src, const spiro_seg *s,
-		double *dm, int ncq, int n, bezctx *bc)
+		double *dm, int ncq, int n, void *bc)
 {
     int i, j, lk, nsegs, z;
     double di[8], x0, y0, x1, y1;
